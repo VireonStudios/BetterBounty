@@ -17,7 +17,9 @@ import dev.vireon.bounty.economy.impl.VaultEconomyManager;
 import dev.vireon.bounty.listener.ConnectionListener;
 import dev.vireon.bounty.listener.DeathListener;
 import dev.vireon.bounty.util.ChatUtils;
+import dev.vireon.bounty.util.UpdateChecker;
 import lombok.Getter;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -25,6 +27,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +53,8 @@ public final class BountyPlugin extends JavaPlugin {
 
     private BukkitCommandManager<CommandSender> commandManager;
 
+    private UpdateChecker updateChecker;
+
     @Override
     public void onEnable() {
         foliaLib = new FoliaLib(this);
@@ -68,6 +76,28 @@ public final class BountyPlugin extends JavaPlugin {
         scheduler.runTimerAsync(database::saveAllBounties, 15, 15, TimeUnit.MINUTES); // Save bounties every 15 minutes
 
         new Metrics(this, 26889);
+
+
+        (updateChecker = new UpdateChecker(this)).checkUpdates();
+        this.getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onJoin(PlayerJoinEvent event) {
+                if (updateChecker.isUpToDate()) return;
+                Player player = event.getPlayer();
+                if (!player.hasPermission("betterbounty.updatecheck")) return;
+
+                ChatUtils.sendMessage(player, ChatUtils.format(
+                        "<#ff002f>BetterBounty <gray>| <white>An update was found!"
+                ));
+                ChatUtils.sendMessage(player, ChatUtils.format(
+                        "<#ff002f>BetterBounty <gray>| <white>Update message:"
+                ));
+                ChatUtils.sendMessage(player, ChatUtils.format(
+                        "<#ff002f>BetterBounty <gray>| <#ffa1b2><message>",
+                        Placeholder.parsed("message", updateChecker.getUpdateMessage())
+                ));
+            }
+        }, this);
     }
 
     @Override
