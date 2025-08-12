@@ -1,0 +1,8 @@
+name: BetterBounty
+version: '${version}'
+main: dev.vireon.bounty.BountyPlugin
+api-version: '1.19'
+authors: [ hyperion ]
+folia-supported: true
+depend:
+  - Vault

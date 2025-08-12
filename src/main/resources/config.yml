@@ -1,0 +1,125 @@
+settings:
+  maximum-bounty: 100000000 # 100 million, set to -1 for no limit
+  minimum-bounty: 1
+
+  commands:
+    - "bounty"
+    - "bounties"
+
+  sounds:
+    success: "minecraft:entity.player.levelup"
+    fail: "minecraft:entity.villager.no"
+    claim: "minecraft:block.beacon.power_select"
+    cancel: "minecraft:block.tripwire.click_on"
+
+messages:
+  no-perm: "<red>Not enough permission."
+  invalid-command: "<red>Invalid or wrong command. (or argument)"
+  player-not-found: "<red>Target player not found."
+  reload: "<green>Successfully reloaded."
+
+  click-cooldown: "<red>You must wait a few seconds before clicking again."
+
+  no-bounty: "<gray>This player has no bounty set."
+  bounty-removed: "<gray>Bounty removed successfully."
+
+  bounty-claimed: "<green>You claimed the bounty of <yellow>$<amount> <green>by killing <yellow><player><green>."
+
+  bounty-added: "<gray>You added <yellow>$<amount> <gray>to <yellow><player>'s <gray>bounty."
+  bounty-added-to-you: "<yellow><player> <gray>added <yellow>$<amount> <gray>to your bounty."
+
+  not-enough-money: "<red>Not enough money to set this bounty."
+  minimum-bounty: "<red>Minimum bounty is <yellow>$1."
+  maximum-bounty: "<red>Maximum bounty is <yellow>$100M."
+
+  sort-types:
+    AMOUNT: "<#03fcb1>Amount</#03fcb1>"
+    LAST_UPDATED: "<#03fcb1>Recently Set</#03fcb1>"
+    NAME: "<#03fcb1>Name</#03fcb1>"
+
+  sign:
+    material: "OAK_WALL_SIGN"
+    color: "BLACK"
+    glow: true
+    lines:
+      - ""
+      - "^^^^^^^^"
+      - "Search"
+      - ""
+
+gui:
+  title: "ʙᴏᴜɴᴛɪᴇs"
+  rows: 5
+  page-size: 36
+
+  items:
+
+    bounty:
+      name: "<#03fcb1><player>"
+      lore:
+        - "<white>Bounty: <#03fcb1><bounty>"
+
+    info:
+      slot: 40
+      material: SKELETON_SKULL
+      name: "<#03fcb1>ʙᴏᴜɴᴛɪᴇs"
+      lore:
+        - "<white>Click to refresh"
+        - ""
+        - "<gray>Set a bounty using this:"
+        - "<gray>/bounty add <player> <amount>"
+
+    search:
+      slot: 41
+      material: OAK_SIGN
+      name: "<#03fcb1>sᴇᴀʀᴄʜ"
+      lore:
+        - "<white>Click to search for a player"
+
+    sort:
+      slot: 39
+      material: HOPPER
+      name: "<#03fcb1>sᴏʀᴛ"
+      lore:
+        - "<white>Click to sort (<sort>)"
+
+    next-page:
+      slot: 44
+      material: ARROW
+      name: "<#03fcb1>ɴᴇxᴛ"
+      lore: [ ]
+
+    previous-page:
+      slot: 36
+      material: ARROW
+      name: "<#03fcb1>ᴘʀᴇᴠɪᴏᴜs"
+      lore: [ ]
+
+
+confirm-gui:
+  title: "ᴄᴏɴғɪʀᴍ"
+  rows: 3
+  items:
+    cancel:
+      slot: 11
+      material: RED_STAINED_GLASS_PANE
+      name: "<#ff0000>ᴄᴀɴᴄᴇʟ"
+      lore:
+        - "<white>Click to cancel"
+
+    confirm:
+      slot: 15
+      material: LIME_STAINED_GLASS_PANE
+      name: "<#1aff00>ᴄᴏɴғɪʀᴍ"
+      lore:
+        - "<white>Click to confirm"
+
+    info:
+      slot: 13
+      material: NETHER_STAR
+      name: "<#f6ff00>ʙᴏᴜɴᴛʏ ɪɴғᴏʀᴍᴀᴛɪᴏɴ"
+      lore:
+        - ""
+        - "<white>Player: <#03fcb1><player>"
+        - "<white>Bounty: <#03fcb1><bounty>"
+        - ""
