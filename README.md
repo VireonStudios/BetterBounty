@@ -10,8 +10,7 @@ automatically on kill.
 
 ### Key Features ✨
 
-- 🖥️ **GUI-first**: Paginated GUI with player heads, refresh, search, and sort controls. **Exact replica of DonutSMP!**
-  🍩
+- 🍩 **GUI-first**: Paginated GUI with player heads, refresh, search, and sort controls.
 - 🔎 **Search**: In-game sign input to filter by player name
 - 🔀 **Sorting**: Toggle between **Amount → Recently Set → Name**
 - ✅ **Confirm flow**: Add bounty through a confirmation GUI
