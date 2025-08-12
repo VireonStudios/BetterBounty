@@ -1,7 +1,10 @@
 ## BetterBounty ⚔️💰
 
-⚡ Simple, fast, and Folia-supported bounty plugin for Minecraft servers. 🎮 Players can place bounties via a clean GUI,
-search names, sort by amount, bounty or name, and claim rewards automatically on kill.
+⚡ Simple, fast, and Folia-supported bounty plugin for Minecraft servers.\
+🎮 Players can place bounties via a clean GUI, search names, sort by amount, bounty or name, and claim rewards
+automatically on kill.
+
+**🍩 Exact replica of the DonutSMP's bounty system, now available for your server, for free!**
 
 🛠️ Fully configurable with MiniMessage formatting, Vault economy support, and SQLite database.
 
