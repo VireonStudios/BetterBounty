@@ -109,13 +109,8 @@ public class BountyManager {
             return "kd".equals(statBlockingMode) ? BountyResult.BAD_STATS_KD : BountyResult.BAD_STATS_DEATHS;
         }
         
-        // Only check stats for online players since we need access to their statistics
-        if (!offlinePlayer.isOnline()) {
-            // For offline players, we can't check their stats, so allow the bounty
-            // This is a reasonable compromise since most stat checking will happen for active players
-            return BountyResult.SUCCESS;
-        }
-        
+        // Now we can check stats for both online and offline players using OfflinePlayer.getStatistic()
+        // Paper API 1.19+ supports statistics for offline players
         if ("kd".equals(statBlockingMode)) {
             // Check K/D ratio using helper method
             double kd = getPlayerKD(playerId);
@@ -134,13 +129,13 @@ public class BountyManager {
      */
     public double getPlayerKD(UUID playerId) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
-        if (!offlinePlayer.isOnline()) return 0.0;
         
-        Player onlinePlayer = offlinePlayer.getPlayer();
-        if (onlinePlayer == null) return 0.0;
+        // Use OfflinePlayer.getStatistic() which works for both online and offline players
+        // Paper API 1.19+ supports statistics for offline players
+        if (!offlinePlayer.hasPlayedBefore()) return 0.0;
         
-        int kills = onlinePlayer.getStatistic(Statistic.PLAYER_KILLS);
-        int deaths = onlinePlayer.getStatistic(Statistic.DEATHS);
+        int kills = offlinePlayer.getStatistic(Statistic.PLAYER_KILLS);
+        int deaths = offlinePlayer.getStatistic(Statistic.DEATHS);
         
         return deaths == 0 ? kills : (double) kills / deaths;
     }
@@ -152,12 +147,12 @@ public class BountyManager {
      */
     public int getPlayerDeaths(UUID playerId) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
-        if (!offlinePlayer.isOnline()) return 0;
         
-        Player onlinePlayer = offlinePlayer.getPlayer();
-        if (onlinePlayer == null) return 0;
+        // Use OfflinePlayer.getStatistic() which works for both online and offline players
+        // Paper API 1.19+ supports statistics for offline players
+        if (!offlinePlayer.hasPlayedBefore()) return 0;
         
-        return onlinePlayer.getStatistic(Statistic.DEATHS);
+        return offlinePlayer.getStatistic(Statistic.DEATHS);
     }
     
     /**
