@@ -75,8 +75,8 @@ settings:
 ```
 
 - **KD mode**: Blocks bounties on players with K/D ratio below the threshold
-- **Deaths mode**: Blocks bounties on players with fewer deaths than required
-- Checks stats for both online and offline players (Paper API 1.19+ supports offline player statistics)
+- **Deaths mode**: Blocks bounties on players with more deaths than allowed
+- Checks stats for both online and offline players
 - New players (never joined) are treated as having bad stats when enabled
 
 ### Data storage 🗄️
