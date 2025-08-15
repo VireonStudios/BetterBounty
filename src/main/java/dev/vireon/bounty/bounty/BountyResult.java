@@ -6,6 +6,8 @@ public enum BountyResult {
     INVALID_AMOUNT,
     MAXIMUM_EXCEEDED,
     NOT_ENOUGH_MONEY,
+    BAD_STATS_KD,
+    BAD_STATS_DEATHS,
 
     ;
 

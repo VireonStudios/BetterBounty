@@ -1,6 +1,13 @@
 settings:
   maximum-bounty: 100000000 # 100 million, set to -1 for no limit
   minimum-bounty: 1
+  
+  # Block placing bounties on players with bad stats
+  stat-blocking:
+    enabled: false # Set to true to enable stat-based bounty blocking
+    mode: "kd" # "kd" for K/D ratio or "deaths" for minimum deaths
+    minimum-kd: 1.0 # Minimum K/D ratio required (only used if mode is "kd")
+    minimum-deaths: 10 # Minimum deaths required (only used if mode is "deaths")
 
   commands:
     - "bounty"
@@ -31,6 +38,9 @@ messages:
   not-enough-money: "<red>Not enough money to set this bounty."
   minimum-bounty: "<red>Minimum bounty is <yellow>$1."
   maximum-bounty: "<red>Maximum bounty is <yellow>$100M."
+  
+  bad-stats-kd: "<red>Cannot place bounty on this player - their K/D ratio is too low (<yellow><kd><red>, minimum: <yellow><min_kd><red>)."
+  bad-stats-deaths: "<red>Cannot place bounty on this player - they don't have enough deaths (<yellow><deaths><red>, minimum: <yellow><min_deaths><red>)."
 
   sort-types:
     AMOUNT: "<#03fcb1>Amount</#03fcb1>"
