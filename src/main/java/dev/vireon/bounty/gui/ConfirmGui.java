@@ -73,7 +73,7 @@ public class ConfirmGui {
                     ChatUtils.sendMessage(player, ChatUtils.format(
                             plugin.getConfig().getString("messages.bad-stats-deaths"),
                             Placeholder.unparsed("deaths", String.valueOf(deaths)),
-                            Placeholder.unparsed("min_deaths", String.valueOf(plugin.getBountyManager().getMinimumDeaths()))
+                            Placeholder.unparsed("max_deaths", String.valueOf(plugin.getBountyManager().getMaximumDeaths()))
                     ));
                 }
             }

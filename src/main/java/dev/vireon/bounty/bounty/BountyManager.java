@@ -32,9 +32,9 @@ public class BountyManager {
     @Getter
     private String statBlockingMode = "kd";
     @Getter
-    private double minimumKd = 1.0;
+    private double minimumKd = 0.5;
     @Getter
-    private int minimumDeaths = 10;
+    private int maximumDeaths = 100;
 
     public void init() {
         max = plugin.getConfig().getLong("settings.maximum-bounty", 100_000_000);
@@ -43,8 +43,8 @@ public class BountyManager {
         // Load stat blocking configuration
         statBlockingEnabled = plugin.getConfig().getBoolean("settings.stat-blocking.enabled", false);
         statBlockingMode = plugin.getConfig().getString("settings.stat-blocking.mode", "kd");
-        minimumKd = plugin.getConfig().getDouble("settings.stat-blocking.minimum-kd", 1.0);
-        minimumDeaths = plugin.getConfig().getInt("settings.stat-blocking.minimum-deaths", 10);
+        minimumKd = plugin.getConfig().getDouble("settings.stat-blocking.minimum-kd", 0.5);
+        maximumDeaths = plugin.getConfig().getInt("settings.stat-blocking.maximum-deaths", 100);
     }
 
     public BountyResult addBounty(Player player, UUID playerId, long amount) {
@@ -109,27 +109,14 @@ public class BountyManager {
             return BountyResult.SUCCESS;
         }
         
-        Player onlinePlayer = offlinePlayer.getPlayer();
-        if (onlinePlayer == null) {
-            return BountyResult.SUCCESS;
-        }
-        
         if ("kd".equals(statBlockingMode)) {
-            // Check K/D ratio
-            int kills = onlinePlayer.getStatistic(Statistic.PLAYER_KILLS);
-            int deaths = onlinePlayer.getStatistic(Statistic.DEATHS);
-            
-            // If player has no deaths, their K/D is effectively infinite (good)
-            if (deaths == 0) {
-                return kills >= 1 ? BountyResult.SUCCESS : BountyResult.BAD_STATS_KD;
-            }
-            
-            double kd = (double) kills / deaths;
+            // Check K/D ratio using helper method
+            double kd = getPlayerKD(playerId);
             return kd >= minimumKd ? BountyResult.SUCCESS : BountyResult.BAD_STATS_KD;
         } else {
-            // Check minimum deaths
-            int deaths = onlinePlayer.getStatistic(Statistic.DEATHS);
-            return deaths >= minimumDeaths ? BountyResult.SUCCESS : BountyResult.BAD_STATS_DEATHS;
+            // Check maximum deaths using helper method
+            int deaths = getPlayerDeaths(playerId);
+            return deaths <= maximumDeaths ? BountyResult.SUCCESS : BountyResult.BAD_STATS_DEATHS;
         }
     }
     
