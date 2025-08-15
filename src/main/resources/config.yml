@@ -2,6 +2,9 @@ settings:
   maximum-bounty: 100000000 # 100 million, set to -1 for no limit
   minimum-bounty: 1
   
+  # Tax system for bounty claims (disabled by default)
+  tax: -1 # Tax percentage applied to bounty claims. Set to -1 or below to disable, 0+ to enable (e.g., 10 = 10% tax)
+  
   # Block placing bounties on players with bad stats
   stat-blocking:
     enabled: false # Set to true to enable stat-based bounty blocking
