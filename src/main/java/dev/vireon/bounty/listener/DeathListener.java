@@ -27,12 +27,15 @@ public class DeathListener implements Listener {
         Bounty bounty = plugin.getBountyManager().getBounty(player.getUniqueId());
         if (bounty == null) return;
 
+        // Calculate after-tax amount using the tax system
+        long afterTaxAmount = plugin.getBountyManager().calculateAfterTaxAmount(bounty.getAmount());
+
         plugin.getBountyManager().removeBounty(player.getUniqueId());
-        plugin.getEconomyManager().add(killer, bounty.getAmount());
+        plugin.getEconomyManager().add(killer, afterTaxAmount);
 
         ChatUtils.sendMessage(killer, ChatUtils.format(
                 plugin.getConfig().getString("messages.bounty-claimed"),
-                Placeholder.unparsed("amount", ChatUtils.FORMATTER.format(bounty.getAmount())),
+                Placeholder.unparsed("amount", ChatUtils.FORMATTER.format(afterTaxAmount)),
                 Placeholder.unparsed("player", bounty.getPlayerName())
         ));
 

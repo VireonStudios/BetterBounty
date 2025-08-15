@@ -26,6 +26,10 @@ public class BountyManager {
     @Getter
     private long min = 1;
     
+    // Tax configuration
+    @Getter
+    private double tax = -1;
+    
     // Stat blocking configuration
     @Getter
     private boolean statBlockingEnabled = false;
@@ -39,6 +43,9 @@ public class BountyManager {
     public void init() {
         max = plugin.getConfig().getLong("settings.maximum-bounty", 100_000_000);
         min = plugin.getConfig().getLong("settings.minimum-bounty", 1L);
+        
+        // Load tax configuration
+        tax = plugin.getConfig().getDouble("settings.tax", -1);
         
         // Load stat blocking configuration
         statBlockingEnabled = plugin.getConfig().getBoolean("settings.stat-blocking.enabled", false);
@@ -151,6 +158,22 @@ public class BountyManager {
         if (onlinePlayer == null) return 0;
         
         return onlinePlayer.getStatistic(Statistic.DEATHS);
+    }
+    
+    /**
+     * Calculate the after-tax amount for a bounty claim
+     * @param originalAmount The original bounty amount
+     * @return The amount after tax deduction, or original amount if tax is disabled
+     */
+    public long calculateAfterTaxAmount(long originalAmount) {
+        // Tax disabled if negative value
+        if (tax < 0) {
+            return originalAmount;
+        }
+        
+        // Calculate tax amount and subtract from original
+        double taxAmount = originalAmount * (tax / 100.0);
+        return Math.max(0, originalAmount - (long) taxAmount);
     }
 
 }
