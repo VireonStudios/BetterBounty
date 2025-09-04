@@ -3,7 +3,6 @@ package dev.vireon.bounty.util;
 import dev.vireon.bounty.BountyPlugin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -30,7 +29,7 @@ public class UpdateChecker {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.getScheduler().runAsync((task) -> {
             try {
                 HttpsURLConnection con = (HttpsURLConnection) URI.create(URL).toURL().openConnection();
                 con.setUseCaches(false);

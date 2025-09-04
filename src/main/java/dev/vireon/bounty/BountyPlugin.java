@@ -77,7 +77,6 @@ public final class BountyPlugin extends JavaPlugin {
 
         new Metrics(this, 26889);
 
-
         (updateChecker = new UpdateChecker(this)).checkUpdates();
         this.getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler
