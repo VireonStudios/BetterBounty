@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -24,10 +25,33 @@ public class BountyManager {
     private long max = -1;
     @Getter
     private long min = 1;
+    
+    // Tax configuration
+    @Getter
+    private double tax = -1;
+    
+    // Stat blocking configuration
+    @Getter
+    private boolean statBlockingEnabled = false;
+    @Getter
+    private String statBlockingMode = "kd";
+    @Getter
+    private double minimumKd = 0.5;
+    @Getter
+    private int maximumDeaths = 100;
 
     public void init() {
         max = plugin.getConfig().getLong("settings.maximum-bounty", 100_000_000);
         min = plugin.getConfig().getLong("settings.minimum-bounty", 1L);
+        
+        // Load tax configuration
+        tax = plugin.getConfig().getDouble("settings.tax", -1);
+        
+        // Load stat blocking configuration
+        statBlockingEnabled = plugin.getConfig().getBoolean("settings.stat-blocking.enabled", false);
+        statBlockingMode = plugin.getConfig().getString("settings.stat-blocking.mode", "kd");
+        minimumKd = plugin.getConfig().getDouble("settings.stat-blocking.minimum-kd", 0.5);
+        maximumDeaths = plugin.getConfig().getInt("settings.stat-blocking.maximum-deaths", 100);
     }
 
     public BountyResult addBounty(Player player, UUID playerId, long amount) {
@@ -35,6 +59,14 @@ public class BountyManager {
         if (max != -1 && amount > max) return BountyResult.MAXIMUM_EXCEEDED;
         if (amount < min) return BountyResult.INVALID_AMOUNT;
         if (!plugin.getEconomyManager().has(player, amount)) return BountyResult.NOT_ENOUGH_MONEY;
+        
+        // Check player stats if stat blocking is enabled
+        if (statBlockingEnabled) {
+            BountyResult statResult = checkPlayerStats(playerId);
+            if (statResult != BountyResult.SUCCESS) {
+                return statResult;
+            }
+        }
 
         if (currentBounty == null) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
@@ -61,6 +93,82 @@ public class BountyManager {
     public void removeBounty(UUID playerId) {
         bountyMap.remove(playerId);
         plugin.getDatabase().removeBounty(playerId);
+    }
+    
+    /**
+     * Check if a player meets the stat requirements for having a bounty placed on them
+     * @param playerId The UUID of the player to check
+     * @return BountyResult.SUCCESS if stats are acceptable, or a specific error result
+     */
+    private BountyResult checkPlayerStats(UUID playerId) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+        
+        // If player has never played, they have no stats, so block the bounty
+        if (!offlinePlayer.hasPlayedBefore()) {
+            // Treat new players as having bad stats
+            return "kd".equals(statBlockingMode) ? BountyResult.BAD_STATS_KD : BountyResult.BAD_STATS_DEATHS;
+        }
+        
+        // Now we can check stats for both online and offline players using OfflinePlayer.getStatistic()
+        // Paper API 1.19+ supports statistics for offline players
+        if ("kd".equals(statBlockingMode)) {
+            // Check K/D ratio using helper method
+            double kd = getPlayerKD(playerId);
+            return kd >= minimumKd ? BountyResult.SUCCESS : BountyResult.BAD_STATS_KD;
+        } else {
+            // Check maximum deaths using helper method
+            int deaths = getPlayerDeaths(playerId);
+            return deaths <= maximumDeaths ? BountyResult.SUCCESS : BountyResult.BAD_STATS_DEATHS;
+        }
+    }
+    
+    /**
+     * Get the K/D ratio for a player (for error messages)
+     * @param playerId The UUID of the player
+     * @return The K/D ratio, or 0.0 if unable to calculate
+     */
+    public double getPlayerKD(UUID playerId) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+        
+        // Use OfflinePlayer.getStatistic() which works for both online and offline players
+        // Paper API 1.19+ supports statistics for offline players
+        if (!offlinePlayer.hasPlayedBefore()) return 0.0;
+        
+        int kills = offlinePlayer.getStatistic(Statistic.PLAYER_KILLS);
+        int deaths = offlinePlayer.getStatistic(Statistic.DEATHS);
+        
+        return deaths == 0 ? kills : (double) kills / deaths;
+    }
+    
+    /**
+     * Get the death count for a player (for error messages)
+     * @param playerId The UUID of the player
+     * @return The death count, or 0 if unable to get
+     */
+    public int getPlayerDeaths(UUID playerId) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+        
+        // Use OfflinePlayer.getStatistic() which works for both online and offline players
+        // Paper API 1.19+ supports statistics for offline players
+        if (!offlinePlayer.hasPlayedBefore()) return 0;
+        
+        return offlinePlayer.getStatistic(Statistic.DEATHS);
+    }
+    
+    /**
+     * Calculate the after-tax amount for a bounty claim
+     * @param originalAmount The original bounty amount
+     * @return The amount after tax deduction, or original amount if tax is disabled
+     */
+    public long calculateAfterTaxAmount(long originalAmount) {
+        // Tax disabled if negative value
+        if (tax < 0) {
+            return originalAmount;
+        }
+        
+        // Calculate tax amount and subtract from original
+        double taxAmount = originalAmount * (tax / 100.0);
+        return Math.max(0, originalAmount - (long) taxAmount);
     }
 
 }

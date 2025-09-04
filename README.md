@@ -19,6 +19,7 @@ automatically on kill.
 - 🍃 **Folia supported**: Uses FoliaLib schedulers; `folia-supported: true`
 - ⚙️ **Config-driven**: All messages and GUI texts can be customized easily
 - 🛡️ **Admin commands**: Remove bounties, without hassle of editing databases manually
+- 📊 **Stat-based blocking**: Optional feature to block bounties on players with bad K/D ratios or insufficient deaths to prevent gaming
 
 ### Requirements 📦
 
@@ -59,6 +60,24 @@ automatically on kill.
 
 All messages and GUI text use MiniMessage. Hex colors like `<#03fcb1>` are supported.
 📖 Check [MiniMessage docs](https://docs.advntr.dev/minimessage/format.html) for more details.
+
+#### Stat-based Bounty Blocking 📊
+
+To prevent friends from gaming the bounty system, you can enable stat-based blocking:
+
+```yaml
+settings:
+  stat-blocking:
+    enabled: false  # Set to true to enable feature
+    mode: "kd"      # "kd" for K/D ratio or "deaths" for minimum deaths  
+    minimum-kd: 1.0      # Minimum K/D ratio required (mode: "kd")
+    minimum-deaths: 10   # Minimum deaths required (mode: "deaths")
+```
+
+- **KD mode**: Blocks bounties on players with K/D ratio below the threshold
+- **Deaths mode**: Blocks bounties on players with more deaths than allowed
+- Checks stats for both online and offline players
+- New players (never joined) are treated as having bad stats when enabled
 
 ### Data storage 🗄️
 

@@ -58,6 +58,24 @@ public class ConfirmGui {
                     player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
                     ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.not-enough-money")));
                 }
+                case BAD_STATS_KD -> {
+                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    double kd = plugin.getBountyManager().getPlayerKD(target.getUniqueId());
+                    ChatUtils.sendMessage(player, ChatUtils.format(
+                            plugin.getConfig().getString("messages.bad-stats-kd"),
+                            Placeholder.unparsed("kd", String.format("%.2f", kd)),
+                            Placeholder.unparsed("min_kd", String.format("%.2f", plugin.getBountyManager().getMinimumKd()))
+                    ));
+                }
+                case BAD_STATS_DEATHS -> {
+                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    int deaths = plugin.getBountyManager().getPlayerDeaths(target.getUniqueId());
+                    ChatUtils.sendMessage(player, ChatUtils.format(
+                            plugin.getConfig().getString("messages.bad-stats-deaths"),
+                            Placeholder.unparsed("deaths", String.valueOf(deaths)),
+                            Placeholder.unparsed("max_deaths", String.valueOf(plugin.getBountyManager().getMaximumDeaths()))
+                    ));
+                }
             }
         });
 
