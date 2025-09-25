@@ -32,13 +32,7 @@ public class MainCommand extends BaseCommand {
     }
 
     @SubCommand("add")
-    public void onAdd(Player player, @Suggestion("online-players") String targetName, long amount) {
-        OfflinePlayer target = plugin.getServer().getOfflinePlayer(targetName);
-        if (!target.hasPlayedBefore()) {
-            ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.player-not-found")));
-            return;
-        }
-
+    public void onAdd(Player player, Player target, long amount) {
         ConfirmGui.open(player, plugin, target, amount);
     }
 
