@@ -44,22 +44,22 @@ public class ConfirmGui {
                             Placeholder.unparsed("amount", ChatUtils.FORMATTER.format(amount)),
                             Placeholder.unparsed("player", target.getName() == null ? "---" : target.getName())
                     ));
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f)));
                 }
                 case MAXIMUM_EXCEEDED -> {
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                     ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.maximum-bounty")));
                 }
                 case INVALID_AMOUNT -> {
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                     ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.minimum-bounty")));
                 }
                 case NOT_ENOUGH_MONEY -> {
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                     ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.not-enough-money")));
                 }
                 case BAD_STATS_KD -> {
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                     double kd = plugin.getBountyManager().getPlayerKD(target.getUniqueId());
                     ChatUtils.sendMessage(player, ChatUtils.format(
                             plugin.getConfig().getString("messages.bad-stats-kd"),
@@ -68,7 +68,7 @@ public class ConfirmGui {
                     ));
                 }
                 case BAD_STATS_DEATHS -> {
-                    player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                    plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                     int deaths = plugin.getBountyManager().getPlayerDeaths(target.getUniqueId());
                     ChatUtils.sendMessage(player, ChatUtils.format(
                             plugin.getConfig().getString("messages.bad-stats-deaths"),
@@ -80,7 +80,7 @@ public class ConfirmGui {
         });
 
         gui.setCloseGuiAction(event -> {
-            player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.cancel")), Sound.Source.MASTER, 1.0f, 1.0f));
+            plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.cancel")), Sound.Source.MASTER, 1.0f, 1.0f)));
         });
 
         gui.open(player);

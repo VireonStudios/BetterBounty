@@ -64,28 +64,28 @@ public class MainGui {
 
         setItem(plugin, "gui.items.info", sort, gui, event -> {
             if (CLICK_CACHE.getIfPresent(player.getUniqueId()) != null) {
-                player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                 ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.click-cooldown")));
                 return;
             }
 
             CLICK_CACHE.put(player.getUniqueId(), (byte) 0);
 
-            player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f));
+            plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f)));
             open(player, sort, filter, plugin);
         });
         setItem(plugin, "gui.items.previous-page", sort, gui, event -> gui.previous());
         setItem(plugin, "gui.items.next-page", sort, gui, event -> gui.next());
         setItem(plugin, "gui.items.sort", sort, gui, event -> {
             if (CLICK_CACHE.getIfPresent(player.getUniqueId()) != null) {
-                player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f));
+                plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
                 ChatUtils.sendMessage(player, ChatUtils.format(plugin.getConfig().getString("messages.click-cooldown")));
                 return;
             }
 
             CLICK_CACHE.put(player.getUniqueId(), (byte) 0);
 
-            player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f));
+            plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f)));
             open(player, sort.next(), filter, plugin);
         });
         setItem(plugin, "gui.items.search", sort, gui, event -> {
@@ -99,14 +99,14 @@ public class MainGui {
                             String input = result.getLine(0);
                             if (input == null || input.isEmpty()) {
                                 return List.of(
-                                        SignGUIAction.run(() -> plugin.getScheduler().runNextTick(task -> open(player, sort, null, plugin))),
-                                        SignGUIAction.run(() -> plugin.getScheduler().runNextTick(task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f))))
+                                        SignGUIAction.run(() -> plugin.getScheduler().runAtEntity(player, task -> open(player, sort, null, plugin))),
+                                        SignGUIAction.run(() -> plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f))))
                                 );
                             }
 
                             return List.of(
-                                    SignGUIAction.run(() -> plugin.getScheduler().runNextTick(task -> open(player, sort, input, plugin))),
-                                    SignGUIAction.run(() -> plugin.getScheduler().runNextTick(task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f))))
+                                    SignGUIAction.run(() -> plugin.getScheduler().runAtEntity(player, task -> open(player, sort, input, plugin))),
+                                    SignGUIAction.run(() -> plugin.getScheduler().runAtEntity(player, task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.success")), Sound.Source.MASTER, 1.0f, 1.0f))))
                             );
                         })
                         .build();

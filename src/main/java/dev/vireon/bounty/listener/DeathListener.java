@@ -41,7 +41,7 @@ public class DeathListener implements Listener {
 
         String soundKey = plugin.getConfig().getString("settings.sounds.claim");
         if (soundKey != null && !soundKey.isEmpty()) {
-            killer.playSound(Sound.sound(Key.key(soundKey), Sound.Source.MASTER, 1.0f, 1.0f));
+            plugin.getScheduler().runAtEntity(killer, _task -> killer.playSound(Sound.sound(Key.key(soundKey), Sound.Source.MASTER, 1.0f, 1.0f)));
         }
     }
 
