@@ -89,6 +89,11 @@ public class MainGui {
             open(player, sort.next(), filter, plugin);
         });
         setItem(plugin, "gui.items.search", sort, gui, event -> {
+            if (plugin.getFoliaLib().isFolia()) {
+                plugin.getScheduler().runAtEntity(player, _task -> player.playSound(Sound.sound(Key.key(plugin.getConfig().getString("settings.sounds.fail")), Sound.Source.MASTER, 1.0f, 1.0f)));
+                return;
+            }
+
             try {
                 SignGUI signGUI = SignGUI.builder()
                         .setAdventureLines(ChatUtils.format(plugin.getConfig().getStringList("messages.sign.lines")).toArray())
