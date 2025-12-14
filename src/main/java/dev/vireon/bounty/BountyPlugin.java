@@ -16,6 +16,7 @@ import dev.vireon.bounty.economy.EconomyManager;
 import dev.vireon.bounty.economy.impl.VaultEconomyManager;
 import dev.vireon.bounty.listener.ConnectionListener;
 import dev.vireon.bounty.listener.DeathListener;
+import dev.vireon.bounty.placeholder.BetterBountyPlaceholder;
 import dev.vireon.bounty.util.ChatUtils;
 import dev.vireon.bounty.util.UpdateChecker;
 import lombok.Getter;
@@ -97,6 +98,10 @@ public final class BountyPlugin extends JavaPlugin {
                 ));
             }
         }, this);
+
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new BetterBountyPlaceholder(this).register();
+        }
     }
 
     @Override
