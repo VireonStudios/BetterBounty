@@ -164,3 +164,6 @@ public final class BountyPlugin extends JavaPlugin {
     }
 
 }
+if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    new dev.vireon.bounty.placeholder.BetterBountyPlaceholder(this).register();
+                                                                                }
