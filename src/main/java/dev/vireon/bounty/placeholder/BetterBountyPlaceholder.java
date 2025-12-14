@@ -2,8 +2,9 @@ package dev.vireon.bounty.placeholder;
 
 import dev.vireon.bounty.BountyPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BetterBountyPlaceholder extends PlaceholderExpansion {
 
@@ -20,7 +21,7 @@ public class BetterBountyPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Vireon";
+        return String.join(", ", plugin.getDescription().getAuthors());
     }
 
     @Override
@@ -29,16 +30,23 @@ public class BetterBountyPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String params) {
-        if (player == null) return "0";
+    public boolean persist() {
+        return true;
+    }
 
-        if (params.equalsIgnoreCase("bounty")) {
+    @Override
+    public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
+        if (params.equalsIgnoreCase("amount")) {
+            if (player == null) return "0";
+
             return String.valueOf(
-                plugin.getBountyManager()
-                      .getBounty(player.getUniqueId())
-                      .getAmount()
+                    plugin.getBountyManager()
+                            .getBounty(player.getUniqueId())
+                            .getAmount()
             );
         }
+
         return null;
     }
-          }
+
+}
