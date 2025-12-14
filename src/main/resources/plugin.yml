@@ -6,3 +6,5 @@ authors: [ hyperion ]
 folia-supported: true
 depend:
   - Vault
+softdepend:
+  - PlaceholderAPI
