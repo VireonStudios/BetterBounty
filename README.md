@@ -20,11 +20,13 @@ automatically on kill.
 - ⚙️ **Config-driven**: All messages and GUI texts can be customized easily
 - 🛡️ **Admin commands**: Remove bounties, without hassle of editing databases manually
 - 📊 **Stat-based blocking**: Optional feature to block bounties on players with bad K/D ratios or insufficient deaths to prevent gaming
+- 📈 **bStats metrics**: Anonymous usage stats to help improve the plugin
+- 🧩 **PlaceholderAPI support**: Optional placeholders for bounties (%betterbounty_amount%)
 
 ### Requirements 📦
 
 - ☕ **Java**: 21
-- 🖥️ **Server**: Paper/Folia (`1.19.2 - 1.21.8`)
+- 🖥️ **Server**: Paper/Folia (`1.19.2 - 1.21.11`)
 - 🔌 **Dependencies**: `Vault` and a Vault-compatible economy provider
 
 ### Installation 🚀
