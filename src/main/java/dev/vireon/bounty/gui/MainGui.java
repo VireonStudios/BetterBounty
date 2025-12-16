@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainGui {
 
-    private static final Cache<UUID, Byte> CLICK_CACHE = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
+    private static final Cache<UUID, Byte> CLICK_CACHE = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.SECONDS).build();
 
     public static void open(Player player, BountyIndex.SortField sort, @Nullable String filter, BountyPlugin plugin) {
         PaginatedGui gui = Gui.paginated()
@@ -126,6 +126,8 @@ public class MainGui {
     }
 
     private static void setItem(BountyPlugin plugin, String path, BountyIndex.SortField sort, PaginatedGui gui, GuiAction<InventoryClickEvent> action) {
+        if (plugin.getConfig().getInt(path + ".slot") < 0) return;
+
         gui.setItem(plugin.getConfig().getInt(path + ".slot"),
                 PaperItemBuilder.from(Material.valueOf(plugin.getConfig().getString(path + ".material")))
                         .name(ChatUtils.format(plugin.getConfig().getString(path + ".name")))
