@@ -1,6 +1,7 @@
 package dev.vireon.bounty.placeholder;
 
 import dev.vireon.bounty.BountyPlugin;
+import dev.vireon.bounty.bounty.Bounty;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -39,11 +40,8 @@ public class BetterBountyPlaceholder extends PlaceholderExpansion {
         if (params.equalsIgnoreCase("amount")) {
             if (player == null) return "0";
 
-            return String.valueOf(
-                    plugin.getBountyManager()
-                            .getBounty(player.getUniqueId())
-                            .getAmount()
-            );
+            Bounty bounty = plugin.getBountyManager().getBounty(player.getUniqueId());
+            return bounty == null ? "0" : String.valueOf(bounty.getAmount());
         }
 
         return null;
